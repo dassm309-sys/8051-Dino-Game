@@ -1,0 +1,20 @@
+Keil C51 / UVision Junk Files
+
+*.obj
+*.lst
+*.lnp
+*.m51
+*.__i
+*.build_log.htm
+*.dep
+.uvgui.
+.uvguix.
+*.htm
+*.map
+*.hex
+*.bin
+
+OS Files
+
+.DS_Store
+Thumbs.db
