@@ -2,8 +2,6 @@
 
 > **A retro-style implementation of the Google Chrome "Dino Runner," engineered from scratch for the 8051 Microcontroller architecture.**
 
-![Project Banner](public/banner_placeholder.png)
-*(Note: Replace with a photo of your hardware setup or Proteus simulation)*
 
 ## 📄 Project Overview
 This project is a hardware-level gaming console built on the **AT89C51**, a classic 8-bit microcontroller. Unlike modern game development that relies on operating systems and graphics engines, this project runs on "bare metal", managing every pixel, clock cycle, and memory address manually.
