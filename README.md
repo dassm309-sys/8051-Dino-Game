@@ -1,113 +1,115 @@
-///***8051 Based Dino Game: Dual-Prototype Implementation
+<div align="center">
 
-An interactive implementation of the classic "Dino Runner" game logic built using the AT89C51 (8051 Family) Microcontroller. This project showcases high-performance embedded systems design, demonstrating hardware interfacing across two distinct display technologies: a character-based 20x4 LCD and a pixel-based SSD1306 OLED.
+🦖 8051 Based Dino Game 🎮
 
-///***👥 Authors
+Dual-Prototype Implementation (LCD & OLED)
 
-Midhun Dhass D (24BLC1037)
+A retro-gaming engineering project built from scratch on the AT89C51 Microcontroller.
 
-Linga Raja R (24BVD1110)
+</div>
 
-///***🎯 Objectives
+📖 Project Overview
 
-Implement complex game logic within the 128-byte RAM and 4KB Flash constraints of the 8051 architecture.
+This project is a hardware-level implementation of the classic Google Chrome Dino Runner, engineered to run on the resource-constrained 8051 architecture. Unlike modern game development, every pixel, clock cycle, and memory address here is managed manually.
 
-Demonstrate bidirectional I/O management and real-time display updates.
+Key Achievement: We successfully ported the game logic to two distinct display technologies—a character-based LCD and a graphical OLED—using custom-written software drivers.
 
-Provide a flicker-free gaming experience through optimized software drivers.
+👥 Authors
 
-///***🛠️ System Architecture
+Name
 
-The project is divided into two distinct hardware prototypes:
+Role
 
-1. Character LCD System (Prototype 1)
+ID
+
+Midhun Dhass D
+
+Firmware Engineering & Optimization
+
+24BLC1037
+
+Linga Raja R
+
+Hardware Design & Prototyping
+
+24BVD1110
+
+🛠️ System Architecture
+
+We developed two independent prototypes to demonstrate versatile hardware interfacing:
+
+🔰 Prototype 1: The "Bare Metal" LCD System
+
+Built on a breadboard using the raw AT89C51 DIP-40 IC.
 
 Display: JHD204A 20x4 Alphanumeric LCD.
 
-Interface: 4-bit Parallel Mode (to optimize GPIO usage).
+Interface: 4-bit Parallel Mode (Optimized to save GPIO pins).
 
-Graphics: Utilizes CGRAM (Character Generator RAM) to render custom 5x8 pixel sprites for the Dino and Obstacles.
+Visuals: Custom CGRAM Sprites (5x8 pixels) for the Dino and Cacti.
 
-Control Pins: RS (P3.5), EN (P3.7), Data (P2.4-P2.7).
+Key Challenge: Implementing a 5µs timing driver to fix LCD initialization failures.
 
-2. Graphical OLED System (Prototype 2)
+⚡ Prototype 2: The OLED Dev-Kit System
 
-Display: 0.96" SSD1306 OLED (128x64 pixels).
+Built using an 8051 Development Board for high-speed graphics.
 
-Interface: Software Bit-Banged I2C Protocol.
+Display: 0.96" SSD1306 OLED (128x64 Pixels).
 
-Graphics: Pixel-perfect 8x8 sprite rendering stored in CODE memory to save internal RAM.
+Interface: Software Bit-Banged I2C Protocol (since 8051 has no native I2C).
 
-Control Pins: SCL (P2.1), SDA (P2.2).
+Visuals: Pixel-perfect 8x8 Bitmaps stored in Flash (CODE) memory.
 
-///***🎮 Game Features
+Key Challenge: Achieving a flicker-free frame rate by updating only moving pixels.
 
-Dual Game Modes: Supports Classic and High-Speed/Hardcore modes for varied difficulty.
+🎮 Game Features
 
-Flicker-Free Logic: Instead of clearing the whole screen, the software only updates changed pixels/cells, maintaining high frame rates.
+🏃 Dual Game Modes: Select between Classic Dino Run and Terrain Challenge.
 
-Audio Feedback: Real-time collision alerts via a 5V active piezo buzzer.
+🚫 Flicker-Free Engine: Logic optimized to redraw only changed screen areas.
 
-Adjustable Settings: User-adjustable brightness control and score tracking system.
+🔊 Audio Feedback: Active Buzzer alerts on jumps and collisions.
 
-📁 Repository Structure
+💾 Memory Optimization: Sprites stored in CODE memory to bypass the 128-byte RAM limit.
 
-/src/prototype-1-lcd: C source code for the 4-bit LCD implementation.
+💻 Software Implementation Guide
 
-/src/prototype-2-oled: C source code for the bit-banged I2C OLED implementation.
+1. Prerequisites
 
-/docs: Project report, schematics, and Bill of Materials (BOM).
+IDE: Keil µVision 5 (C51 Compiler).
 
-/assets: Photographs of the prototypes and circuit diagrams.
+Flasher: PROGISP or XGPRO (for USBASP/TL866 programmers).
+
+2. How to Build & Flash
+
+Open Project: Launch Keil and create a new project for the AT89C51.
+
+Add Source: * For LCD: Add src/prototype-1-lcd/dino_game_4bit.c
+
+For OLED: Add src/prototype-2-oled/dino_game_oled.c
+
+Configure: Set Target Frequency to 12.0 MHz and check "Create HEX File".
+
+Compile: Build the project (Ensure 0 Errors).
+
+Flash: Upload the .hex file to your microcontroller.
+
+📂 Repository Structure
+
+/8051-Dino-Game
+├── /src
+│   ├── /prototype-1-lcd    # Source code for LCD version
+│   └── /prototype-2-oled   # Source code for OLED version
+├── /docs
+│   ├── BOM.md              # Complete Bill of Materials
+│   └── Technical_Manual.md # Deep dive into timing & logic
+└── /assets                 # Schematics and Prototype photos
 
 
+📝 License & References
 
+License: Open Source (MIT).
 
-///***📝 References
+References: Mazidi 8051 Textbook, SSD1306 Datasheet, HD44780 Datasheet.
 
-VIT Chennai - School of Electronics Engineering (SENSE).
-
-Mazidi, M. A. "The 8051 Microcontroller and Embedded Systems."
-
-SSD1306 and HD44780 controller datasheets.
-
-
-
-
-///***💻 Software Implementation Guide
-
-To make this project work at the software level, follow these steps:
-
-1. Development Environment Setup
-
-Software: Install Keil µVision 5 (C51 version).
-
-Project Creation: * Create a new Project and select AT89C51 from the Legacy Device Database.
-
-When prompted to copy "STARTUP.A51", select Yes.
-
-Target Frequency: Set the target clock frequency to 12.0 MHz (or 11.0592 MHz if using UART) in the Project Options.
-
-2. Handling the Driver Logic
-
-LCD Timing: The 8051 is fast. You must use the provided delay_us(5) function for the Enable (EN) pulse. Standard delays often fail because they are too slow for the HD44780 controller.
-
-I2C Bit-Banging (OLED): Since the 8051 has no native I2C, use the provided i2c_start, i2c_stop, and i2c_write functions to manually toggle the SDA and SCL pins.
-
-Memory Management: Use the code keyword (e.g., unsigned char code dino8[]) to store sprite arrays in Flash memory. The 8051 has very limited RAM (128 bytes), so storing graphics in RAM will cause a stack overflow.
-
-3. Compilation & HEX Generation
-
-Right-click on the project name in Keil and go to Options for Target 'Target 1'.
-
-Under the Output tab, check the box "Create HEX File".
-
-Click Rebuild All Target Files. Ensure there are 0 Errors.
-
-4. Flashing the Microcontroller
-
-Use a programmer like USBASP (for AT89S52) or TL866II Plus (for AT89C51).
-
-Load the .hex file generated by Keil into the programmer software (e.g., PROGISP or XGPRO).
-
-Connect the IC and click Write/Program.
+Institution: VIT Chennai, School of Electronics Engineering (SENSE).
